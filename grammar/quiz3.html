@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar in Context Quiz - Part 3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress {
+            background: #4CAF50;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .quiz-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        .question-number {
+            color: #11998e;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .tense-tag {
+            display: inline-block;
+            background: #11998e;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .context-box {
+            background: #f0f9f7;
+            border-left: 4px solid #11998e;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            color: #555;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+        .option:hover {
+            border-color: #11998e;
+            background: #f0f9f7;
+        }
+        .option.selected {
+            border-color: #11998e;
+            background: #11998e;
+            color: white;
+        }
+        .option.correct {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: white;
+        }
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        .option.show-correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .btn {
+            background: #11998e;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #0d7d74;
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .explanation {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .explanation.show {
+            display: block;
+        }
+        .explanation h4 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+        .formula {
+            background: #fff3e0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #ff9800;
+        }
+        .results {
+            text-align: center;
+            display: none;
+        }
+        .results h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .score-circle span {
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .result-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .start-screen {
+            text-align: center;
+        }
+        .start-screen h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .tense-list {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        .tense-list h4 {
+            color: #11998e;
+            margin-bottom: 10px;
+        }
+        .tense-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .tense-list li {
+            padding: 5px 0;
+            color: #555;
+        }
+        .tense-list li::before {
+            content: ">";
+            color: #11998e;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .review-btn {
+            background: #ff9800;
+            margin-left: 10px;
+        }
+        .review-btn:hover {
+            background: #f57c00;
+        }
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">&larr; Back to Home</a>
+        <div class="header">
+            <h1>Grammar in Context</h1>
+            <p>Apply Grammar in Real-World Writing</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="stats">
+            <span>Question: <span id="currentQ">0</span>/50</span>
+            <span>Score: <span id="score">0</span></span>
+        </div>
+
+        <div class="quiz-card" id="quizCard">
+            <!-- Start Screen -->
+            <div class="start-screen" id="startScreen">
+                <h2>Real-World Writing Challenge!</h2>
+                <p>Apply your grammar knowledge in authentic writing contexts</p>
+                <div class="tense-list">
+                    <h4>Writing Contexts Covered:</h4>
+                    <ul>
+                        <li>Professional Emails - Formal business communication</li>
+                        <li>Academic Writing - Essays and reports</li>
+                        <li>Cover Letters - Job applications</li>
+                        <li>Complaint Letters - Formal complaints</li>
+                        <li>Narrative Writing - Storytelling</li>
+                        <li>Descriptive Writing - Descriptions and reviews</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <!-- Question Screen -->
+            <div id="questionScreen" class="hidden">
+                <span class="tense-tag" id="tenseTag">Writing Type</span>
+                <p class="question-number">Question <span id="qNum">1</span> of 50</p>
+                <div class="context-box" id="contextBox"></div>
+                <p class="question" id="questionText">Question goes here?</p>
+                <div class="options" id="options"></div>
+                <div class="explanation" id="explanation">
+                    <h4>Explanation:</h4>
+                    <p id="explanationText"></p>
+                    <div class="formula" id="formulaText"></div>
+                </div>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results" id="resultsScreen">
+                <h2>Quiz Complete!</h2>
+                <div class="score-circle">
+                    <span id="finalScore">0%</span>
+                </div>
+                <p class="result-message" id="resultMessage"></p>
+                <button class="btn" onclick="startQuiz()">Try Again</button>
+                <button class="btn review-btn" onclick="reviewQuiz()">Review Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Professional Emails (10 questions)
+            {
+                tense: "Professional Email",
+                context: "You are writing an email to request a meeting with your manager.",
+                question: "Choose the most appropriate opening: _____",
+                options: [
+                    "Hey, can we meet?",
+                    "I would like to request a meeting at your earliest convenience.",
+                    "I want to meet you now.",
+                    "We need to talk soon."
+                ],
+                correct: 1,
+                explanation: "Professional emails require formal language. 'Would like to' is more polite than 'want to'.",
+                formula: "Formal request: would like to + verb"
+            },
+            {
+                tense: "Professional Email",
+                context: "You need to follow up on a proposal you sent last week.",
+                question: "Complete the sentence: I _____ to follow up on the proposal I sent last week.",
+                options: ["write", "am writing", "wrote", "have written"],
+                correct: 1,
+                explanation: "Present continuous is used to state the purpose of the current email.",
+                formula: "Purpose of email: am/is/are writing to..."
+            },
+            {
+                tense: "Professional Email",
+                context: "You are apologizing for a delayed response.",
+                question: "Which is the most professional apology? _____",
+                options: [
+                    "Sorry for the late reply.",
+                    "I apologize for the delayed response.",
+                    "My bad for not replying sooner.",
+                    "Oops, forgot to reply!"
+                ],
+                correct: 1,
+                explanation: "In formal emails, 'I apologize for' is more professional than 'sorry for'.",
+                formula: "Formal apology: I apologize for + noun/gerund"
+            },
+            {
+                tense: "Professional Email",
+                context: "You are confirming a meeting scheduled for next Tuesday.",
+                question: "This email is to confirm that the meeting _____ on Tuesday at 2 PM.",
+                options: ["takes place", "will take place", "is taking place", "took place"],
+                correct: 1,
+                explanation: "'Will take place' is appropriate for confirming scheduled future events.",
+                formula: "Future arrangements: will + verb"
+            },
+            {
+                tense: "Professional Email",
+                context: "You want to politely ask for information about a project.",
+                question: "Choose the most polite request: _____",
+                options: [
+                    "Send me the project details.",
+                    "I need the project details now.",
+                    "Could you please provide the project details?",
+                    "Give me information about the project."
+                ],
+                correct: 2,
+                explanation: "'Could you please' is a polite way to make requests in professional emails.",
+                formula: "Polite request: Could you please + verb?"
+            },
+            {
+                tense: "Professional Email",
+                context: "You are declining an invitation to a business event.",
+                question: "Unfortunately, I _____ attend the event due to a prior commitment.",
+                options: ["can't", "am not able to", "will not be able to", "don't"],
+                correct: 2,
+                explanation: "'Will not be able to' is formal and indicates future inability.",
+                formula: "Formal decline: will not be able to + verb"
+            },
+            {
+                tense: "Professional Email",
+                context: "You are thanking a colleague for their help with a presentation.",
+                question: "I _____ like to express my gratitude for your assistance.",
+                options: ["will", "would", "could", "should"],
+                correct: 1,
+                explanation: "'Would like to' expresses polite intention in formal writing.",
+                formula: "Expressing gratitude: would like to + verb"
+            },
+            {
+                tense: "Professional Email",
+                context: "You need to inform your team about a deadline change.",
+                question: "Please note that the deadline _____ to Friday.",
+                options: ["changed", "has been changed", "is changing", "changes"],
+                correct: 1,
+                explanation: "Present perfect passive is used to announce recent changes with current relevance.",
+                formula: "Announcing changes: has/have been + V3"
+            },
+            {
+                tense: "Professional Email",
+                context: "You are ending an email and expecting a reply.",
+                question: "Choose the most appropriate closing: _____",
+                options: [
+                    "Reply ASAP!",
+                    "I look forward to hearing from you.",
+                    "Write back when you can.",
+                    "Waiting for your answer."
+                ],
+                correct: 1,
+                explanation: "'I look forward to' is the standard professional closing expecting a response.",
+                formula: "Professional closing: I look forward to + gerund"
+            },
+            {
+                tense: "Professional Email",
+                context: "You are attaching documents to an email.",
+                question: "Please find _____ the requested documents.",
+                options: ["attach", "attached", "attaching", "attachment"],
+                correct: 1,
+                explanation: "'Please find attached' is the standard phrase for email attachments.",
+                formula: "Attachments: Please find attached..."
+            },
+
+            // Academic Writing (10 questions)
+            {
+                tense: "Academic Writing",
+                context: "You are writing the introduction to a research paper.",
+                question: "This study _____ the effects of climate change on agriculture.",
+                options: ["examines", "is examining", "examined", "will examine"],
+                correct: 0,
+                explanation: "Present simple is used in academic writing to describe what a study does.",
+                formula: "Describing research: present simple"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are referring to previous research in your literature review.",
+                question: "Smith (2020) _____ that social media affects mental health.",
+                options: ["argues", "argued", "has argued", "is arguing"],
+                correct: 0,
+                explanation: "Present simple is used to cite ongoing relevance of previous research.",
+                formula: "Citing sources: Author (year) + present simple"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are describing the methodology of your experiment.",
+                question: "The participants _____ randomly assigned to two groups.",
+                options: ["are", "were", "have been", "had been"],
+                correct: 1,
+                explanation: "Past simple passive is used to describe completed methodology.",
+                formula: "Methodology: was/were + V3 (passive)"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are presenting your findings in the results section.",
+                question: "The results _____ that there is a significant correlation.",
+                options: ["show", "showed", "are showing", "have showed"],
+                correct: 0,
+                explanation: "Present simple is often used to present results that remain valid.",
+                formula: "Presenting results: present simple"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are making a recommendation in your conclusion.",
+                question: "Further research _____ be conducted to verify these findings.",
+                options: ["can", "will", "should", "must"],
+                correct: 2,
+                explanation: "'Should' is used for academic recommendations.",
+                formula: "Recommendations: should + be + V3"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are describing a general truth in your paper.",
+                question: "Water _____ at 100 degrees Celsius at sea level.",
+                options: ["boils", "is boiling", "boiled", "has boiled"],
+                correct: 0,
+                explanation: "Present simple is used for scientific facts and general truths.",
+                formula: "Scientific facts: present simple"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are discussing limitations of your study.",
+                question: "A larger sample size _____ have provided more reliable results.",
+                options: ["will", "would", "could", "should"],
+                correct: 1,
+                explanation: "'Would have' expresses hypothetical past outcomes in academic writing.",
+                formula: "Hypothetical: would have + V3"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are introducing a quote in your essay.",
+                question: "As Johnson (2019) _____, 'Education is the key to success.'",
+                options: ["states", "stated", "has stated", "is stating"],
+                correct: 0,
+                explanation: "Present simple is used to introduce quotes from academic sources.",
+                formula: "Introducing quotes: As Author states/argues/notes..."
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are making a comparison between two theories.",
+                question: "Theory A _____ from Theory B in several key aspects.",
+                options: ["differ", "differs", "differed", "is differing"],
+                correct: 1,
+                explanation: "Present simple for stating current differences between concepts.",
+                formula: "Comparisons: present simple"
+            },
+            {
+                tense: "Academic Writing",
+                context: "You are writing about historical events in your paper.",
+                question: "The Industrial Revolution _____ in Britain in the 18th century.",
+                options: ["begins", "began", "has begun", "was beginning"],
+                correct: 1,
+                explanation: "Past simple is used for completed historical events.",
+                formula: "Historical events: past simple"
+            },
+
+            // Cover Letters (8 questions)
+            {
+                tense: "Cover Letter",
+                context: "You are applying for a marketing position.",
+                question: "I am writing to apply for the Marketing Manager position that _____ on your website.",
+                options: ["advertises", "was advertised", "has advertised", "is advertising"],
+                correct: 1,
+                explanation: "Past simple passive describes where you saw the job posting.",
+                formula: "Job application opening: was advertised"
+            },
+            {
+                tense: "Cover Letter",
+                context: "You want to highlight your relevant experience.",
+                question: "I _____ in marketing for over five years.",
+                options: ["work", "worked", "have worked", "am working"],
+                correct: 2,
+                explanation: "Present perfect emphasizes experience continuing to the present.",
+                formula: "Experience: have + V3 + for + duration"
+            },
+            {
+                tense: "Cover Letter",
+                context: "You are describing your current responsibilities.",
+                question: "In my current role, I _____ a team of ten professionals.",
+                options: ["manage", "managed", "have managed", "am managing"],
+                correct: 0,
+                explanation: "Present simple describes current, ongoing responsibilities.",
+                formula: "Current duties: present simple"
+            },
+            {
+                tense: "Cover Letter",
+                context: "You want to express enthusiasm for the position.",
+                question: "I _____ excited about the opportunity to contribute to your team.",
+                options: ["am", "was", "will be", "have been"],
+                correct: 0,
+                explanation: "Present simple 'am' expresses current enthusiasm.",
+                formula: "Expressing enthusiasm: am + adjective"
+            },
+            {
+                tense: "Cover Letter",
+                context: "You are describing a past achievement.",
+                question: "In my previous role, I _____ sales by 30% within one year.",
+                options: ["increase", "increased", "have increased", "was increasing"],
+                correct: 1,
+                explanation: "Past simple is used for specific achievements in previous positions.",
+                formula: "Past achievements: past simple"
+            },
+            {
+                tense: "Cover Letter",
+                context: "You want to express what you can offer the company.",
+                question: "I believe I _____ a valuable asset to your organization.",
+                options: ["am", "will be", "would be", "have been"],
+                correct: 2,
+                explanation: "'Would be' shows confident yet humble assertion about potential.",
+                formula: "Potential contribution: would be + noun"
+            },
+            {
+                tense: "Cover Letter",
+                context: "You are closing the letter and requesting an interview.",
+                question: "I _____ appreciate the opportunity to discuss my qualifications.",
+                options: ["will", "would", "could", "should"],
+                correct: 1,
+                explanation: "'Would appreciate' is polite and professional for requests.",
+                formula: "Polite request: would appreciate + noun"
+            },
+            {
+                tense: "Cover Letter",
+                context: "You mention when you are available to start.",
+                question: "I _____ available to start from January 15th.",
+                options: ["am", "will be", "would be", "have been"],
+                correct: 1,
+                explanation: "'Will be' indicates future availability with certainty.",
+                formula: "Future availability: will be + available"
+            },
+
+            // Complaint Letters (7 questions)
+            {
+                tense: "Complaint Letter",
+                context: "You are writing to complain about a faulty product.",
+                question: "I am writing to express my dissatisfaction with a product I _____ last month.",
+                options: ["purchase", "purchased", "have purchased", "was purchasing"],
+                correct: 1,
+                explanation: "Past simple for a completed action at a specific past time.",
+                formula: "Past action: past simple + time marker"
+            },
+            {
+                tense: "Complaint Letter",
+                context: "You are describing an ongoing problem.",
+                question: "The product _____ properly since I bought it.",
+                options: ["doesn't work", "didn't work", "hasn't worked", "isn't working"],
+                correct: 2,
+                explanation: "Present perfect for a situation that started in the past and continues.",
+                formula: "Ongoing problem: hasn't/haven't + V3 + since"
+            },
+            {
+                tense: "Complaint Letter",
+                context: "You tried to resolve the issue previously.",
+                question: "I _____ customer service three times, but the issue remains unresolved.",
+                options: ["contact", "contacted", "have contacted", "am contacting"],
+                correct: 2,
+                explanation: "Present perfect emphasizes repeated attempts with current relevance.",
+                formula: "Repeated attempts: have + V3 + number of times"
+            },
+            {
+                tense: "Complaint Letter",
+                context: "You are requesting a specific action.",
+                question: "I _____ like to request a full refund for this defective item.",
+                options: ["will", "would", "could", "should"],
+                correct: 1,
+                explanation: "'Would like' is polite but firm for making formal requests.",
+                formula: "Formal request: would like to + verb"
+            },
+            {
+                tense: "Complaint Letter",
+                context: "You are setting a deadline for response.",
+                question: "I expect to receive a response by Friday, or I _____ forced to take further action.",
+                options: ["am", "was", "will be", "would be"],
+                correct: 2,
+                explanation: "'Will be' indicates a consequence if conditions aren't met.",
+                formula: "Conditional warning: will be + V3"
+            },
+            {
+                tense: "Complaint Letter",
+                context: "You are describing the impact of the problem.",
+                question: "This issue _____ significant inconvenience to my family.",
+                options: ["causes", "caused", "has caused", "is causing"],
+                correct: 2,
+                explanation: "Present perfect shows the accumulated impact of the problem.",
+                formula: "Impact: has/have caused + noun"
+            },
+            {
+                tense: "Complaint Letter",
+                context: "You are concluding the letter.",
+                question: "I trust this matter _____ resolved promptly.",
+                options: ["is", "was", "will be", "has been"],
+                correct: 2,
+                explanation: "'Will be' expresses expectation of future resolution.",
+                formula: "Expectation: will be + V3"
+            },
+
+            // Narrative Writing (8 questions)
+            {
+                tense: "Narrative Writing",
+                context: "You are starting a short story.",
+                question: "It _____ a dark and stormy night when the stranger arrived.",
+                options: ["is", "was", "has been", "had been"],
+                correct: 1,
+                explanation: "Past simple sets the scene for narrative writing.",
+                formula: "Setting the scene: It was..."
+            },
+            {
+                tense: "Narrative Writing",
+                context: "You are describing background events before the main action.",
+                question: "She _____ for hours before she finally found the hidden door.",
+                options: ["searched", "was searching", "had been searching", "has been searching"],
+                correct: 2,
+                explanation: "Past perfect continuous shows duration before another past event.",
+                formula: "Background action: had been + V-ing"
+            },
+            {
+                tense: "Narrative Writing",
+                context: "You are describing two simultaneous past actions.",
+                question: "While the children _____, their parents prepared dinner.",
+                options: ["play", "played", "were playing", "had played"],
+                correct: 2,
+                explanation: "Past continuous for actions happening at the same time in the past.",
+                formula: "Simultaneous actions: While + was/were + V-ing"
+            },
+            {
+                tense: "Narrative Writing",
+                context: "You are describing an earlier event in a flashback.",
+                question: "He suddenly remembered that he _____ the door unlocked.",
+                options: ["leaves", "left", "had left", "was leaving"],
+                correct: 2,
+                explanation: "Past perfect for events that happened before the main narrative.",
+                formula: "Flashback: had + V3"
+            },
+            {
+                tense: "Narrative Writing",
+                context: "You are building suspense in your story.",
+                question: "Something _____ in the darkness. She held her breath.",
+                options: ["moves", "moved", "was moving", "had moved"],
+                correct: 2,
+                explanation: "Past continuous creates atmosphere and suspense.",
+                formula: "Creating suspense: was/were + V-ing"
+            },
+            {
+                tense: "Narrative Writing",
+                context: "You are describing a sudden action that interrupts another.",
+                question: "She _____ peacefully when a loud noise woke her up.",
+                options: ["sleeps", "slept", "was sleeping", "had slept"],
+                correct: 2,
+                explanation: "Past continuous for an ongoing action interrupted by another.",
+                formula: "Interrupted action: was/were + V-ing + when + past simple"
+            },
+            {
+                tense: "Narrative Writing",
+                context: "You are writing the climax of your story.",
+                question: "At that moment, everything _____. The truth was finally revealed.",
+                options: ["changes", "changed", "was changing", "had changed"],
+                correct: 1,
+                explanation: "Past simple for the main events in narrative climax.",
+                formula: "Main events: past simple"
+            },
+            {
+                tense: "Narrative Writing",
+                context: "You are ending your story.",
+                question: "And from that day on, she _____ forgot the lesson she had learned.",
+                options: ["doesn't", "didn't", "never", "never"],
+                correct: 2,
+                explanation: "'Never' with past simple emphasizes the lasting impact.",
+                formula: "Ending: never + past simple"
+            },
+
+            // Descriptive Writing (7 questions)
+            {
+                tense: "Descriptive Writing",
+                context: "You are writing a restaurant review.",
+                question: "The restaurant _____ a cozy atmosphere with dim lighting.",
+                options: ["have", "has", "is having", "had"],
+                correct: 1,
+                explanation: "Present simple describes permanent characteristics.",
+                formula: "Describing features: has/have + noun"
+            },
+            {
+                tense: "Descriptive Writing",
+                context: "You are describing your experience at a hotel.",
+                question: "The staff _____ incredibly helpful during our stay.",
+                options: ["is", "was", "were", "has been"],
+                correct: 2,
+                explanation: "Past simple describes experience during a completed stay.",
+                formula: "Past experience: was/were + adjective"
+            },
+            {
+                tense: "Descriptive Writing",
+                context: "You are writing a product review.",
+                question: "This laptop _____ fast and has excellent battery life.",
+                options: ["run", "runs", "is running", "ran"],
+                correct: 1,
+                explanation: "Present simple for describing product characteristics.",
+                formula: "Product features: present simple"
+            },
+            {
+                tense: "Descriptive Writing",
+                context: "You are describing a place you visited.",
+                question: "As I _____ through the forest, I noticed the beautiful wildflowers.",
+                options: ["walk", "walked", "was walking", "have walked"],
+                correct: 2,
+                explanation: "Past continuous sets the scene for a description.",
+                formula: "Setting description: was/were + V-ing"
+            },
+            {
+                tense: "Descriptive Writing",
+                context: "You are recommending a book.",
+                question: "I highly recommend this book. It _____ one of the best I've ever read.",
+                options: ["is", "was", "has been", "will be"],
+                correct: 0,
+                explanation: "Present simple for current recommendations and opinions.",
+                formula: "Recommendations: present simple"
+            },
+            {
+                tense: "Descriptive Writing",
+                context: "You are describing a scene in detail.",
+                question: "The sun _____ slowly behind the mountains, painting the sky orange.",
+                options: ["sets", "set", "was setting", "has set"],
+                correct: 2,
+                explanation: "Past continuous creates vivid, dynamic descriptions.",
+                formula: "Vivid description: was/were + V-ing"
+            },
+            {
+                tense: "Descriptive Writing",
+                context: "You are writing about your hometown.",
+                question: "My hometown _____ for its beautiful beaches and friendly people.",
+                options: ["knows", "is known", "was known", "has known"],
+                correct: 1,
+                explanation: "Present simple passive for describing what something is famous for.",
+                formula: "Fame/reputation: is known for..."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            shuffleArray(questions);
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            quizStarted = true;
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.remove('hidden');
+
+            updateStats();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('tenseTag').textContent = q.tense;
+            document.getElementById('qNum').textContent = currentQuestion + 1;
+            document.getElementById('contextBox').textContent = q.context;
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            document.getElementById('explanation').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function selectOption(index) {
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+
+            options.forEach(opt => {
+                opt.onclick = null;
+                opt.classList.remove('selected');
+            });
+
+            userAnswers[currentQuestion] = index;
+
+            if (index === q.correct) {
+                options[index].classList.add('correct');
+                score++;
+            } else {
+                options[index].classList.add('incorrect');
+                options[q.correct].classList.add('show-correct');
+            }
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('formulaText').textContent = q.formula;
+            document.getElementById('explanation').classList.add('show');
+
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Next Question';
+
+            updateStats();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                showQuestion();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function showResults() {
+            document.getElementById('questionScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').style.display = 'block';
+
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = percentage + '%';
+
+            let message = '';
+            if (percentage >= 90) {
+                message = 'Excellent! You can apply grammar perfectly in real writing!';
+            } else if (percentage >= 70) {
+                message = 'Great job! Your contextual grammar is strong.';
+            } else if (percentage >= 50) {
+                message = 'Good progress! Practice more with different writing styles.';
+            } else {
+                message = 'Keep practicing! Focus on formal and academic writing patterns.';
+            }
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        function reviewQuiz() {
+            currentQuestion = 0;
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.remove('hidden');
+            showReviewQuestion();
+        }
+
+        function showReviewQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('tenseTag').textContent = q.tense;
+            document.getElementById('qNum').textContent = currentQuestion + 1;
+            document.getElementById('contextBox').textContent = q.context;
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+
+                if (index === q.correct) {
+                    optionDiv.classList.add('correct');
+                } else if (userAnswers[currentQuestion] === index) {
+                    optionDiv.classList.add('incorrect');
+                }
+
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('formulaText').textContent = q.formula;
+            document.getElementById('explanation').classList.add('show');
+
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Back to Results' : 'Next Question';
+            document.getElementById('nextBtn').onclick = () => {
+                currentQuestion++;
+                if (currentQuestion >= questions.length) {
+                    showResults();
+                } else {
+                    showReviewQuestion();
+                }
+            };
+
+            updateStats();
+        }
+    </script>
+</body>
+</html>

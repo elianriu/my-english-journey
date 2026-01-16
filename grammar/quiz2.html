@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Tenses Quiz - Part 2</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress {
+            background: #4CAF50;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .quiz-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        .question-number {
+            color: #f5576c;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .tense-tag {
+            display: inline-block;
+            background: #f5576c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+        .option:hover {
+            border-color: #f5576c;
+            background: #fff5f6;
+        }
+        .option.selected {
+            border-color: #f5576c;
+            background: #f5576c;
+            color: white;
+        }
+        .option.correct {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: white;
+        }
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        .option.show-correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .btn {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #e04558;
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .explanation {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .explanation.show {
+            display: block;
+        }
+        .explanation h4 {
+            color: #f5576c;
+            margin-bottom: 10px;
+        }
+        .formula {
+            background: #fff3e0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #ff9800;
+        }
+        .results {
+            text-align: center;
+            display: none;
+        }
+        .results h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .score-circle span {
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .result-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .start-screen {
+            text-align: center;
+        }
+        .start-screen h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .tense-list {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        .tense-list h4 {
+            color: #f5576c;
+            margin-bottom: 10px;
+        }
+        .tense-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .tense-list li {
+            padding: 5px 0;
+            color: #555;
+        }
+        .tense-list li::before {
+            content: ">";
+            color: #f5576c;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .review-btn {
+            background: #ff9800;
+            margin-left: 10px;
+        }
+        .review-btn:hover {
+            background: #f57c00;
+        }
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">&larr; Back to Home</a>
+        <div class="header">
+            <h1>Advanced Tenses Quiz</h1>
+            <p>Mixed Conditionals & Reported Speech</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="stats">
+            <span>Question: <span id="currentQ">0</span>/50</span>
+            <span>Score: <span id="score">0</span></span>
+        </div>
+
+        <div class="quiz-card" id="quizCard">
+            <!-- Start Screen -->
+            <div class="start-screen" id="startScreen">
+                <h2>Advanced Grammar Challenge!</h2>
+                <p>Test your knowledge of advanced tense patterns</p>
+                <div class="tense-list">
+                    <h4>Topics Covered:</h4>
+                    <ul>
+                        <li>Third Conditional: If + had + V3, would have + V3</li>
+                        <li>Mixed Conditional (Past->Present): If + had + V3, would + V1</li>
+                        <li>Mixed Conditional (Present->Past): If + V2, would have + V3</li>
+                        <li>Reported Speech - Statements</li>
+                        <li>Reported Speech - Questions</li>
+                        <li>Reported Speech - Commands & Requests</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <!-- Question Screen -->
+            <div id="questionScreen" class="hidden">
+                <span class="tense-tag" id="tenseTag">Tense Type</span>
+                <p class="question-number">Question <span id="qNum">1</span> of 50</p>
+                <p class="question" id="questionText">Question goes here?</p>
+                <div class="options" id="options"></div>
+                <div class="explanation" id="explanation">
+                    <h4>Explanation:</h4>
+                    <p id="explanationText"></p>
+                    <div class="formula" id="formulaText"></div>
+                </div>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results" id="resultsScreen">
+                <h2>Quiz Complete!</h2>
+                <div class="score-circle">
+                    <span id="finalScore">0%</span>
+                </div>
+                <p class="result-message" id="resultMessage"></p>
+                <button class="btn" onclick="startQuiz()">Try Again</button>
+                <button class="btn review-btn" onclick="reviewQuiz()">Review Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Third Conditional (15 questions)
+            {
+                tense: "Third Conditional",
+                question: "If I _____ earlier, I would have caught the train.",
+                options: ["leave", "left", "had left", "have left"],
+                correct: 2,
+                explanation: "Third conditional uses 'if + had + past participle' for unreal past conditions.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "She would have passed the exam if she _____ harder.",
+                options: ["study", "studied", "had studied", "has studied"],
+                correct: 2,
+                explanation: "The if-clause in third conditional requires past perfect (had + V3).",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "If they _____ the map, they wouldn't have gotten lost.",
+                options: ["bring", "brought", "had brought", "have brought"],
+                correct: 2,
+                explanation: "Imaginary past situation uses 'if + had + past participle'.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "We _____ the concert if we had known about it.",
+                options: ["attend", "attended", "would attend", "would have attended"],
+                correct: 3,
+                explanation: "The result clause uses 'would have + past participle'.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "If he _____ the truth, I would have forgiven him.",
+                options: ["tell", "told", "had told", "has told"],
+                correct: 2,
+                explanation: "Past unreal condition requires past perfect in the if-clause.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "I _____ you if I had known you were in trouble.",
+                options: ["help", "helped", "would help", "would have helped"],
+                correct: 3,
+                explanation: "The main clause needs 'would have + V3' for past unreal results.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "If the weather _____ better, we would have had a picnic.",
+                options: ["is", "was", "had been", "has been"],
+                correct: 2,
+                explanation: "Past hypothetical uses 'if + had been' for states.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "They _____ the accident if they had driven more carefully.",
+                options: ["avoid", "avoided", "would avoid", "would have avoided"],
+                correct: 3,
+                explanation: "Unreal past result uses 'would have + past participle'.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "If I _____ you were coming, I would have prepared dinner.",
+                options: ["know", "knew", "had known", "have known"],
+                correct: 2,
+                explanation: "The condition in third conditional uses past perfect.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "She wouldn't have been late if the bus _____ on time.",
+                options: ["arrive", "arrived", "had arrived", "has arrived"],
+                correct: 2,
+                explanation: "Past unreal condition requires 'had + past participle'.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "If we _____ enough money, we would have bought the house.",
+                options: ["have", "had", "had had", "have had"],
+                correct: 2,
+                explanation: "'Had had' is the past perfect of 'have' for third conditional.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "I _____ to the party if I hadn't been sick.",
+                options: ["go", "went", "would go", "would have gone"],
+                correct: 3,
+                explanation: "The result of an unreal past condition uses 'would have + V3'.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "If he _____ the instructions, he wouldn't have made mistakes.",
+                options: ["read", "reads", "had read", "has read"],
+                correct: 2,
+                explanation: "Third conditional if-clause needs past perfect.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "We _____ the train if we had left five minutes earlier.",
+                options: ["catch", "caught", "would catch", "would have caught"],
+                correct: 3,
+                explanation: "Past hypothetical result requires 'would have + V3'.",
+                formula: "If + had + V3, would have + V3"
+            },
+            {
+                tense: "Third Conditional",
+                question: "If she _____ allergic to cats, she would have adopted one.",
+                options: ["isn't", "wasn't", "hadn't been", "hasn't been"],
+                correct: 2,
+                explanation: "Past unreal state uses 'if + hadn't been'.",
+                formula: "If + had + V3, would have + V3"
+            },
+
+            // Mixed Conditional - Past cause, Present result (10 questions)
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "If I had studied medicine, I _____ a doctor now.",
+                options: ["am", "was", "would be", "would have been"],
+                correct: 2,
+                explanation: "Past decision affecting present state uses 'would + V1' in result.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "If she hadn't missed the interview, she _____ employed today.",
+                options: ["is", "was", "would be", "would have been"],
+                correct: 2,
+                explanation: "Past event affecting current situation: result uses 'would be'.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "He _____ fluent in French now if he had practiced more.",
+                options: ["is", "was", "would be", "would have been"],
+                correct: 2,
+                explanation: "Past action with present consequence uses 'would + V1'.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "If they had saved money, they _____ rich now.",
+                options: ["are", "were", "would be", "would have been"],
+                correct: 2,
+                explanation: "Past condition affecting present state: 'would be' for result.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "I _____ the answer now if I had paid attention in class.",
+                options: ["know", "knew", "would know", "would have known"],
+                correct: 2,
+                explanation: "Past learning affecting present knowledge uses 'would know'.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "If we had invested in that company, we _____ wealthy today.",
+                options: ["are", "were", "would be", "would have been"],
+                correct: 2,
+                explanation: "Past decision with current consequence uses 'would + V1'.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "She _____ here with us now if she hadn't moved abroad.",
+                options: ["is", "was", "would be", "would have been"],
+                correct: 2,
+                explanation: "Past action affecting present situation: result is 'would be'.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "If I had eaten breakfast, I _____ so hungry now.",
+                options: ["am not", "wasn't", "wouldn't be", "wouldn't have been"],
+                correct: 2,
+                explanation: "Past omission affecting current state uses 'wouldn't be'.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "If he had learned to drive, he _____ to commute by bus.",
+                options: ["doesn't need", "didn't need", "wouldn't need", "wouldn't have needed"],
+                correct: 2,
+                explanation: "Past learning affecting present necessity uses 'wouldn't need'.",
+                formula: "If + had + V3, would + V1"
+            },
+            {
+                tense: "Mixed Conditional (Past->Present)",
+                question: "We _____ in this apartment now if we had bought a house.",
+                options: ["don't live", "didn't live", "wouldn't live", "wouldn't have lived"],
+                correct: 2,
+                explanation: "Past decision affecting present living situation.",
+                formula: "If + had + V3, would + V1"
+            },
+
+            // Mixed Conditional - Present cause, Past result (10 questions)
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "If I _____ taller, I would have played basketball in school.",
+                options: ["am", "were", "had been", "have been"],
+                correct: 1,
+                explanation: "Present unchangeable condition with past result uses 'were' in if-clause.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "If she _____ afraid of flying, she would have visited her family.",
+                options: ["isn't", "weren't", "hadn't been", "hasn't been"],
+                correct: 1,
+                explanation: "Permanent present trait affecting past uses 'weren't' (subjunctive).",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "He would have gotten the job if he _____ better at interviews.",
+                options: ["is", "were", "had been", "has been"],
+                correct: 1,
+                explanation: "General present ability affecting past outcome uses 'were'.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "If I _____ more patient, I wouldn't have argued with him.",
+                options: ["am", "were", "had been", "have been"],
+                correct: 1,
+                explanation: "Permanent personality trait affecting past behavior.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "They would have won if their team _____ stronger.",
+                options: ["is", "were", "had been", "has been"],
+                correct: 1,
+                explanation: "Current team strength affecting past result uses 'were'.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "If she _____ so stubborn, she would have accepted help.",
+                options: ["isn't", "weren't", "hadn't been", "hasn't been"],
+                correct: 1,
+                explanation: "Permanent trait affecting past action uses 'weren't'.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "I _____ the mountain if I were more athletic.",
+                options: ["climb", "climbed", "would climb", "would have climbed"],
+                correct: 3,
+                explanation: "Present condition affecting hypothetical past uses 'would have + V3'.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "If he _____ allergic to seafood, he would have tried the sushi.",
+                options: ["isn't", "weren't", "hadn't been", "hasn't been"],
+                correct: 1,
+                explanation: "Permanent condition affecting past opportunity.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "She would have applied for the scholarship if she _____ eligible.",
+                options: ["is", "were", "had been", "has been"],
+                correct: 1,
+                explanation: "Current eligibility affecting past action uses 'were'.",
+                formula: "If + V2/were, would have + V3"
+            },
+            {
+                tense: "Mixed Conditional (Present->Past)",
+                question: "If we _____ closer to the city, we would have gone to the concert.",
+                options: ["live", "lived", "had lived", "have lived"],
+                correct: 1,
+                explanation: "Current location affecting past activity uses simple past.",
+                formula: "If + V2/were, would have + V3"
+            },
+
+            // Reported Speech - Statements (8 questions)
+            {
+                tense: "Reported Speech - Statements",
+                question: "She said, 'I am tired.' -> She said that she _____ tired.",
+                options: ["is", "was", "has been", "had been"],
+                correct: 1,
+                explanation: "Present simple in direct speech becomes past simple in reported speech.",
+                formula: "am/is/are -> was/were"
+            },
+            {
+                tense: "Reported Speech - Statements",
+                question: "He said, 'I will help you.' -> He said that he _____ help me.",
+                options: ["will", "would", "shall", "should"],
+                correct: 1,
+                explanation: "'Will' changes to 'would' in reported speech.",
+                formula: "will -> would"
+            },
+            {
+                tense: "Reported Speech - Statements",
+                question: "They said, 'We have finished.' -> They said that they _____ finished.",
+                options: ["have", "has", "had", "having"],
+                correct: 2,
+                explanation: "Present perfect becomes past perfect in reported speech.",
+                formula: "have/has + V3 -> had + V3"
+            },
+            {
+                tense: "Reported Speech - Statements",
+                question: "She said, 'I can swim.' -> She said that she _____ swim.",
+                options: ["can", "could", "may", "might"],
+                correct: 1,
+                explanation: "'Can' changes to 'could' in reported speech.",
+                formula: "can -> could"
+            },
+            {
+                tense: "Reported Speech - Statements",
+                question: "He said, 'I am going to travel.' -> He said that he _____ going to travel.",
+                options: ["is", "was", "has been", "had been"],
+                correct: 1,
+                explanation: "'Am/is/are going to' changes to 'was/were going to'.",
+                formula: "am/is/are going to -> was/were going to"
+            },
+            {
+                tense: "Reported Speech - Statements",
+                question: "They said, 'We lived here.' -> They said that they _____ there.",
+                options: ["live", "lived", "had lived", "have lived"],
+                correct: 2,
+                explanation: "Past simple becomes past perfect in reported speech.",
+                formula: "V2 -> had + V3"
+            },
+            {
+                tense: "Reported Speech - Statements",
+                question: "She said, 'I must leave now.' -> She said that she _____ leave then.",
+                options: ["must", "had to", "has to", "should"],
+                correct: 1,
+                explanation: "'Must' often changes to 'had to' in reported speech.",
+                formula: "must -> had to"
+            },
+            {
+                tense: "Reported Speech - Statements",
+                question: "He said, 'I was sleeping.' -> He said that he _____ sleeping.",
+                options: ["was", "is", "had been", "has been"],
+                correct: 2,
+                explanation: "Past continuous becomes past perfect continuous in reported speech.",
+                formula: "was/were + V-ing -> had been + V-ing"
+            },
+
+            // Reported Speech - Questions (7 questions)
+            {
+                tense: "Reported Speech - Questions",
+                question: "He asked, 'Where do you live?' -> He asked where I _____.",
+                options: ["live", "lived", "had lived", "do live"],
+                correct: 1,
+                explanation: "In reported questions, tense shifts back and word order changes.",
+                formula: "Direct question -> reported: normal word order, no question mark"
+            },
+            {
+                tense: "Reported Speech - Questions",
+                question: "She asked, 'Are you coming?' -> She asked _____ I was coming.",
+                options: ["that", "if/whether", "what", "how"],
+                correct: 1,
+                explanation: "Yes/no questions use 'if' or 'whether' in reported speech.",
+                formula: "Yes/no question -> if/whether + statement order"
+            },
+            {
+                tense: "Reported Speech - Questions",
+                question: "He asked, 'What time is it?' -> He asked what time it _____.",
+                options: ["is", "was", "has been", "had been"],
+                correct: 1,
+                explanation: "Present simple becomes past simple in reported questions.",
+                formula: "Wh-question -> wh-word + statement order"
+            },
+            {
+                tense: "Reported Speech - Questions",
+                question: "She asked, 'Have you seen my keys?' -> She asked _____ I had seen her keys.",
+                options: ["that", "what", "if", "how"],
+                correct: 2,
+                explanation: "Yes/no questions are introduced with 'if' or 'whether'.",
+                formula: "Have you...? -> asked if/whether + had + V3"
+            },
+            {
+                tense: "Reported Speech - Questions",
+                question: "They asked, 'Why did she leave?' -> They asked why she _____.",
+                options: ["leave", "leaves", "had left", "has left"],
+                correct: 2,
+                explanation: "Past simple in direct speech becomes past perfect.",
+                formula: "did + V1 -> had + V3"
+            },
+            {
+                tense: "Reported Speech - Questions",
+                question: "He asked, 'Can you help me?' -> He asked _____ I could help him.",
+                options: ["that", "what", "if", "why"],
+                correct: 2,
+                explanation: "Yes/no questions use 'if' and 'can' becomes 'could'.",
+                formula: "Can you...? -> asked if + could"
+            },
+            {
+                tense: "Reported Speech - Questions",
+                question: "She asked, 'Where will you go?' -> She asked where I _____ go.",
+                options: ["will", "would", "shall", "should"],
+                correct: 1,
+                explanation: "'Will' changes to 'would' in reported questions.",
+                formula: "will -> would"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            shuffleArray(questions);
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            quizStarted = true;
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.remove('hidden');
+
+            updateStats();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('tenseTag').textContent = q.tense;
+            document.getElementById('qNum').textContent = currentQuestion + 1;
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            document.getElementById('explanation').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function selectOption(index) {
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+
+            options.forEach(opt => {
+                opt.onclick = null;
+                opt.classList.remove('selected');
+            });
+
+            userAnswers[currentQuestion] = index;
+
+            if (index === q.correct) {
+                options[index].classList.add('correct');
+                score++;
+            } else {
+                options[index].classList.add('incorrect');
+                options[q.correct].classList.add('show-correct');
+            }
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('formulaText').textContent = q.formula;
+            document.getElementById('explanation').classList.add('show');
+
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Next Question';
+
+            updateStats();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                showQuestion();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function showResults() {
+            document.getElementById('questionScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').style.display = 'block';
+
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = percentage + '%';
+
+            let message = '';
+            if (percentage >= 90) {
+                message = 'Outstanding! You have mastered advanced grammar!';
+            } else if (percentage >= 70) {
+                message = 'Great work! You understand these complex structures well.';
+            } else if (percentage >= 50) {
+                message = 'Good progress! Keep practicing mixed conditionals and reported speech.';
+            } else {
+                message = 'Keep studying! Review the patterns and formulas.';
+            }
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        function reviewQuiz() {
+            currentQuestion = 0;
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.remove('hidden');
+            showReviewQuestion();
+        }
+
+        function showReviewQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('tenseTag').textContent = q.tense;
+            document.getElementById('qNum').textContent = currentQuestion + 1;
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+
+                if (index === q.correct) {
+                    optionDiv.classList.add('correct');
+                } else if (userAnswers[currentQuestion] === index) {
+                    optionDiv.classList.add('incorrect');
+                }
+
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('formulaText').textContent = q.formula;
+            document.getElementById('explanation').classList.add('show');
+
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Back to Results' : 'Next Question';
+            document.getElementById('nextBtn').onclick = () => {
+                currentQuestion++;
+                if (currentQuestion >= questions.length) {
+                    showResults();
+                } else {
+                    showReviewQuestion();
+                }
+            };
+
+            updateStats();
+        }
+    </script>
+</body>
+</html>
