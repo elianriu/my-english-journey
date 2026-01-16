@@ -269,11 +269,12 @@
 
             <!-- Question Screen -->
             <div id="questionScreen" class="hidden">
-                <span class="tense-tag" id="tenseTag">Tense Type</span>
+                
                 <p class="question-number">Question <span id="qNum">1</span> of 100</p>
                 <p class="question" id="questionText">Question goes here?</p>
                 <div class="options" id="options"></div>
                 <div class="explanation" id="explanation">
+                    <span class="tense-tag" id="tenseTag"></span>
                     <h4>Explanation:</h4>
                     <p id="explanationText"></p>
                     <div class="formula" id="formulaText"></div>
@@ -1229,7 +1230,7 @@
 
         function showQuestion() {
             const q = questions[currentQuestion];
-            document.getElementById('tenseTag').textContent = q.tense;
+            
             document.getElementById('qNum').textContent = currentQuestion + 1;
             document.getElementById('questionText').textContent = q.question;
 
@@ -1261,9 +1262,11 @@
 
             if (index === q.correct) {
                 options[index].classList.add('correct');
+                document.getElementById('tenseTag').textContent = q.tense;
                 score++;
             } else {
                 options[index].classList.add('incorrect');
+                document.getElementById('tenseTag').textContent = q.tense;
                 options[q.correct].classList.add('show-correct');
             }
 
