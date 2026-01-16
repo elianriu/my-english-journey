@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Grammar Quiz - 100 Questions</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress {
+            background: #4CAF50;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .quiz-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        .question-number {
+            color: #667eea;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .tense-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+        }
+        .option:hover {
+            border-color: #667eea;
+            background: #f5f5ff;
+        }
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .option.correct {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: white;
+        }
+        .option.incorrect {
+            border-color: #f44336;
+            background: #f44336;
+            color: white;
+        }
+        .option.show-correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background: #5a6fd6;
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .explanation {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .explanation.show {
+            display: block;
+        }
+        .explanation h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .formula {
+            background: #fff3e0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #ff9800;
+        }
+        .results {
+            text-align: center;
+            display: none;
+        }
+        .results h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .score-circle span {
+            color: white;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .result-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .start-screen {
+            text-align: center;
+        }
+        .start-screen h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .tense-list {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        .tense-list h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .tense-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .tense-list li {
+            padding: 5px 0;
+            color: #555;
+        }
+        .tense-list li::before {
+            content: ">";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        .review-btn {
+            background: #ff9800;
+            margin-left: 10px;
+        }
+        .review-btn:hover {
+            background: #f57c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Grammar Pattern Quiz</h1>
+            <p>Master English Tenses with 100 Questions</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="stats">
+            <span>Question: <span id="currentQ">0</span>/100</span>
+            <span>Score: <span id="score">0</span></span>
+        </div>
+
+        <div class="quiz-card" id="quizCard">
+            <!-- Start Screen -->
+            <div class="start-screen" id="startScreen">
+                <h2>Welcome to the Grammar Quiz!</h2>
+                <p>Test your knowledge of English tense patterns</p>
+                <div class="tense-list">
+                    <h4>Topics Covered:</h4>
+                    <ul>
+                        <li>Simple Present: S + V1(s/es)</li>
+                        <li>Present Continuous: S + am/is/are + V-ing</li>
+                        <li>Present Perfect: S + has/have + V3</li>
+                        <li>Present Perfect Continuous: S + has/have been + V-ing</li>
+                        <li>Simple Past: S + V2</li>
+                        <li>Past Continuous: S + was/were + V-ing</li>
+                        <li>Past Perfect: S + had + V3</li>
+                        <li>Past Perfect Continuous: S + had been + V-ing</li>
+                        <li>Simple Future: S + will + V1</li>
+                        <li>Be Going To: S + am/is/are + going to + V1</li>
+                        <li>Second Conditional: If + past, would + V1</li>
+                    </ul>
+                </div>
+                <button class="btn" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <!-- Question Screen -->
+            <div id="questionScreen" class="hidden">
+                <span class="tense-tag" id="tenseTag">Tense Type</span>
+                <p class="question-number">Question <span id="qNum">1</span> of 100</p>
+                <p class="question" id="questionText">Question goes here?</p>
+                <div class="options" id="options"></div>
+                <div class="explanation" id="explanation">
+                    <h4>Explanation:</h4>
+                    <p id="explanationText"></p>
+                    <div class="formula" id="formulaText"></div>
+                </div>
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next Question</button>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results" id="resultsScreen">
+                <h2>Quiz Complete!</h2>
+                <div class="score-circle">
+                    <span id="finalScore">0%</span>
+                </div>
+                <p class="result-message" id="resultMessage"></p>
+                <button class="btn" onclick="startQuiz()">Try Again</button>
+                <button class="btn review-btn" onclick="reviewQuiz()">Review Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Simple Present (10 questions)
+            {
+                tense: "Simple Present",
+                question: "Choose the correct form: She _____ to work every day.",
+                options: ["go", "goes", "going", "gone"],
+                correct: 1,
+                explanation: "With third person singular (he/she/it), we add -s or -es to the verb.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "The sun _____ in the east.",
+                options: ["rise", "rises", "rising", "risen"],
+                correct: 1,
+                explanation: "Facts and general truths use Simple Present with -s for third person singular.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "They _____ English at school.",
+                options: ["teaches", "teaching", "teach", "taught"],
+                correct: 2,
+                explanation: "With plural subjects (they), we use the base form of the verb.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "Water _____ at 100 degrees Celsius.",
+                options: ["boil", "boils", "boiling", "boiled"],
+                correct: 1,
+                explanation: "Scientific facts use Simple Present. Water is singular, so we use 'boils'.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "I _____ coffee every morning.",
+                options: ["drinks", "drinking", "drink", "drunk"],
+                correct: 2,
+                explanation: "With 'I', we use the base form of the verb for habits.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "The train _____ at 8 AM daily.",
+                options: ["leave", "leaves", "leaving", "left"],
+                correct: 1,
+                explanation: "Scheduled events use Simple Present. Third person singular requires -s.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "He never _____ his homework on time.",
+                options: ["finish", "finishes", "finishing", "finished"],
+                correct: 1,
+                explanation: "Habits (with never/always/usually) use Simple Present.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "My parents _____ in New York.",
+                options: ["lives", "live", "living", "lived"],
+                correct: 1,
+                explanation: "Plural subject (parents) takes the base form of the verb.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "The Earth _____ around the Sun.",
+                options: ["revolve", "revolves", "revolving", "revolved"],
+                correct: 1,
+                explanation: "Scientific facts use Simple Present with -s for singular subjects.",
+                formula: "S + V1(s/es)"
+            },
+            {
+                tense: "Simple Present",
+                question: "She _____ Spanish and French fluently.",
+                options: ["speak", "speaks", "speaking", "spoken"],
+                correct: 1,
+                explanation: "Abilities and states use Simple Present. She requires -s ending.",
+                formula: "S + V1(s/es)"
+            },
+
+            // Present Continuous (10 questions)
+            {
+                tense: "Present Continuous",
+                question: "Look! The children _____ in the park.",
+                options: ["play", "plays", "are playing", "played"],
+                correct: 2,
+                explanation: "'Look!' indicates an action happening now, requiring Present Continuous.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "I _____ a book right now.",
+                options: ["read", "reads", "am reading", "was reading"],
+                correct: 2,
+                explanation: "'Right now' signals an action in progress, using am + V-ing with 'I'.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "She _____ dinner at the moment.",
+                options: ["cooks", "is cooking", "cooked", "cook"],
+                correct: 1,
+                explanation: "'At the moment' indicates ongoing action. She + is + V-ing.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "We _____ for the bus now.",
+                options: ["wait", "waits", "are waiting", "waited"],
+                correct: 2,
+                explanation: "'Now' requires Present Continuous. We + are + V-ing.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "The baby _____ because it's hungry.",
+                options: ["cry", "cries", "is crying", "cried"],
+                correct: 2,
+                explanation: "Action happening at this moment uses is + V-ing for singular.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "Listen! Someone _____ at the door.",
+                options: ["knock", "knocks", "is knocking", "knocked"],
+                correct: 2,
+                explanation: "'Listen!' signals immediate action, requiring Present Continuous.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "They _____ a new house this year.",
+                options: ["build", "builds", "are building", "built"],
+                correct: 2,
+                explanation: "Temporary situations around now use Present Continuous.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "I _____ to lose weight these days.",
+                options: ["try", "tries", "am trying", "tried"],
+                correct: 2,
+                explanation: "'These days' indicates a temporary current situation.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "The weather _____ colder this week.",
+                options: ["get", "gets", "is getting", "got"],
+                correct: 2,
+                explanation: "Changing situations use Present Continuous.",
+                formula: "S + am/is/are + V-ing"
+            },
+            {
+                tense: "Present Continuous",
+                question: "He _____ too much lately.",
+                options: ["work", "works", "is working", "worked"],
+                correct: 2,
+                explanation: "'Lately' with ongoing situations uses Present Continuous.",
+                formula: "S + am/is/are + V-ing"
+            },
+
+            // Present Perfect (10 questions)
+            {
+                tense: "Present Perfect",
+                question: "I _____ that movie three times.",
+                options: ["see", "saw", "have seen", "am seeing"],
+                correct: 2,
+                explanation: "Experiences up to now use Present Perfect: have/has + V3.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "She _____ in Paris for five years.",
+                options: ["live", "lived", "has lived", "is living"],
+                correct: 2,
+                explanation: "Duration from past to present uses has + V3 for third person.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "We _____ our homework yet.",
+                options: ["don't finish", "didn't finish", "haven't finished", "aren't finishing"],
+                correct: 2,
+                explanation: "'Yet' with negative sentences uses haven't + V3.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "He _____ just _____ from work.",
+                options: ["has/returned", "have/returned", "is/returning", "was/returning"],
+                correct: 0,
+                explanation: "'Just' indicates recent completion, using has + V3.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "They _____ never _____ sushi before.",
+                options: ["have/tried", "has/tried", "are/trying", "were/trying"],
+                correct: 0,
+                explanation: "Life experiences use have + never + V3 with plural subjects.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "_____ you ever _____ to Japan?",
+                options: ["Have/been", "Has/been", "Did/go", "Are/going"],
+                correct: 0,
+                explanation: "Questions about life experiences: Have + subject + ever + V3.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "Technology _____ our lives dramatically.",
+                options: ["change", "changed", "has changed", "is changing"],
+                correct: 2,
+                explanation: "Past action with present relevance uses has + V3.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "I _____ already _____ breakfast.",
+                options: ["have/eaten", "has/eaten", "am/eating", "was/eating"],
+                correct: 0,
+                explanation: "'Already' with completed actions uses have + V3.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "The price _____ since last month.",
+                options: ["rise", "rose", "has risen", "is rising"],
+                correct: 2,
+                explanation: "'Since' indicates duration from past to now: has + V3.",
+                formula: "S + has/have + V3"
+            },
+            {
+                tense: "Present Perfect",
+                question: "Someone _____ my phone!",
+                options: ["steal", "stole", "has stolen", "is stealing"],
+                correct: 2,
+                explanation: "Recent action with present result uses Present Perfect.",
+                formula: "S + has/have + V3"
+            },
+
+            // Present Perfect Continuous (9 questions)
+            {
+                tense: "Present Perfect Continuous",
+                question: "I _____ for two hours.",
+                options: ["study", "studied", "have been studying", "am studying"],
+                correct: 2,
+                explanation: "Duration of ongoing activity uses have been + V-ing.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "She _____ all morning. She looks tired.",
+                options: ["works", "worked", "has been working", "is working"],
+                correct: 2,
+                explanation: "Action continuing to present with visible result: has been + V-ing.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "They _____ here since 2010.",
+                options: ["live", "lived", "have been living", "are living"],
+                correct: 2,
+                explanation: "'Since' + point in time with ongoing action uses have been + V-ing.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "How long _____ you _____ English?",
+                options: ["have/been learning", "has/been learning", "are/learning", "did/learn"],
+                correct: 0,
+                explanation: "Questions about duration of ongoing activities: How long + have + been + V-ing.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "It _____ all day. The roads are wet.",
+                options: ["rain", "rained", "has been raining", "is raining"],
+                correct: 2,
+                explanation: "Action from past continuing to now with present evidence.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "He _____ for a job for six months.",
+                options: ["look", "looked", "has been looking", "is looking"],
+                correct: 2,
+                explanation: "Duration of ongoing effort uses has been + V-ing.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "We _____ to contact you all week.",
+                options: ["try", "tried", "have been trying", "are trying"],
+                correct: 2,
+                explanation: "Repeated attempts over time use have been + V-ing.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "The children _____. They're covered in mud.",
+                options: ["play", "played", "have been playing", "are playing"],
+                correct: 2,
+                explanation: "Recent continuous activity with visible evidence.",
+                formula: "S + has/have been + V-ing"
+            },
+            {
+                tense: "Present Perfect Continuous",
+                question: "My eyes hurt. I _____ at the screen too long.",
+                options: ["look", "looked", "have been looking", "am looking"],
+                correct: 2,
+                explanation: "Present result of ongoing past action.",
+                formula: "S + has/have been + V-ing"
+            },
+
+            // Simple Past (10 questions)
+            {
+                tense: "Simple Past",
+                question: "She _____ to London last year.",
+                options: ["go", "goes", "went", "has gone"],
+                correct: 2,
+                explanation: "'Last year' indicates completed past action. Go -> went (V2).",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "They _____ the movie yesterday.",
+                options: ["watch", "watches", "watched", "have watched"],
+                correct: 2,
+                explanation: "'Yesterday' requires Simple Past: regular verb + -ed.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "I _____ my keys this morning.",
+                options: ["lose", "loses", "lost", "have lost"],
+                correct: 2,
+                explanation: "'This morning' (if morning has passed) uses Simple Past.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "The company _____ in 1995.",
+                options: ["start", "starts", "started", "has started"],
+                correct: 2,
+                explanation: "Specific past date uses Simple Past.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "He _____ a letter to his friend.",
+                options: ["write", "writes", "wrote", "has written"],
+                correct: 2,
+                explanation: "Completed past action uses V2 form: write -> wrote.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "We _____ dinner at 7 PM last night.",
+                options: ["have", "has", "had", "have had"],
+                correct: 2,
+                explanation: "Specific past time requires Simple Past: have -> had.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "The train _____ late because of the weather.",
+                options: ["arrive", "arrives", "arrived", "has arrived"],
+                correct: 2,
+                explanation: "Completed past event uses Simple Past.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "I _____ him at the party.",
+                options: ["meet", "meets", "met", "have met"],
+                correct: 2,
+                explanation: "Past event at a specific occasion uses V2: meet -> met.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "She _____ the exam with flying colors.",
+                options: ["pass", "passes", "passed", "has passed"],
+                correct: 2,
+                explanation: "Completed past achievement uses Simple Past.",
+                formula: "S + V2"
+            },
+            {
+                tense: "Simple Past",
+                question: "The children _____ very excited about the trip.",
+                options: ["are", "is", "were", "have been"],
+                correct: 2,
+                explanation: "Past state uses Simple Past: be -> were (plural).",
+                formula: "S + V2"
+            },
+
+            // Past Continuous (10 questions)
+            {
+                tense: "Past Continuous",
+                question: "I _____ when you called.",
+                options: ["sleep", "slept", "was sleeping", "have slept"],
+                correct: 2,
+                explanation: "Action in progress when interrupted uses was/were + V-ing.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "They _____ TV at 8 PM last night.",
+                options: ["watch", "watched", "were watching", "have watched"],
+                correct: 2,
+                explanation: "Action in progress at specific past time: were + V-ing.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "She _____ while he _____ dinner.",
+                options: ["studied/cooked", "was studying/was cooking", "studies/cooks", "has studied/has cooked"],
+                correct: 1,
+                explanation: "Two simultaneous past actions both use Past Continuous.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "What _____ you _____ at 3 PM yesterday?",
+                options: ["did/do", "were/doing", "have/done", "are/doing"],
+                correct: 1,
+                explanation: "Question about action at specific past time: were + V-ing.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "The sun _____ when we arrived at the beach.",
+                options: ["shine", "shone", "was shining", "has shone"],
+                correct: 2,
+                explanation: "Background action when another event happened.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "He _____ his car when it started to rain.",
+                options: ["wash", "washed", "was washing", "has washed"],
+                correct: 2,
+                explanation: "Action interrupted by another event: was + V-ing.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "We _____ about you just now!",
+                options: ["talk", "talked", "were talking", "have talked"],
+                correct: 2,
+                explanation: "'Just now' indicates recent ongoing action.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "The baby _____ all night.",
+                options: ["cry", "cried", "was crying", "has cried"],
+                correct: 2,
+                explanation: "Extended action during past period uses Past Continuous.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "I _____ home when I saw the accident.",
+                options: ["walk", "walked", "was walking", "have walked"],
+                correct: 2,
+                explanation: "Action in progress when another occurred.",
+                formula: "S + was/were + V-ing"
+            },
+            {
+                tense: "Past Continuous",
+                question: "At this time last year, we _____ in Spain.",
+                options: ["travel", "traveled", "were traveling", "have traveled"],
+                correct: 2,
+                explanation: "'At this time last year' requires Past Continuous.",
+                formula: "S + was/were + V-ing"
+            },
+
+            // Past Perfect (10 questions)
+            {
+                tense: "Past Perfect",
+                question: "I _____ the movie before, so I didn't watch it again.",
+                options: ["see", "saw", "had seen", "have seen"],
+                correct: 2,
+                explanation: "Action before another past action uses had + V3.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "She _____ dinner before her guests arrived.",
+                options: ["cook", "cooked", "had cooked", "has cooked"],
+                correct: 2,
+                explanation: "Earlier action before 'arrived' uses had + V3.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "They _____ already _____ when I got there.",
+                options: ["have/left", "had/left", "were/leaving", "are/leaving"],
+                correct: 1,
+                explanation: "Action completed before another past event.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "By the time he arrived, the meeting _____.",
+                options: ["start", "started", "had started", "has started"],
+                correct: 2,
+                explanation: "'By the time' + past signals need for Past Perfect.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "I realized I _____ my wallet at home.",
+                options: ["leave", "left", "had left", "have left"],
+                correct: 2,
+                explanation: "Earlier action discovered later uses had + V3.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "He told me he _____ the report.",
+                options: ["finish", "finished", "had finished", "has finished"],
+                correct: 2,
+                explanation: "Reported speech about earlier action uses Past Perfect.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "The train _____ before we reached the station.",
+                options: ["leave", "left", "had left", "has left"],
+                correct: 2,
+                explanation: "Sequence of past events: earlier one uses had + V3.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "She _____ never _____ abroad before that trip.",
+                options: ["have/traveled", "had/traveled", "was/traveling", "is/traveling"],
+                correct: 1,
+                explanation: "Experience before a past reference point.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "After he _____ lunch, he went back to work.",
+                options: ["eat", "ate", "had eaten", "has eaten"],
+                correct: 2,
+                explanation: "'After' + completed action before another past action.",
+                formula: "S + had + V3"
+            },
+            {
+                tense: "Past Perfect",
+                question: "I didn't recognize her because she _____ so much.",
+                options: ["change", "changed", "had changed", "has changed"],
+                correct: 2,
+                explanation: "Change happened before the moment of not recognizing.",
+                formula: "S + had + V3"
+            },
+
+            // Past Perfect Continuous (9 questions)
+            {
+                tense: "Past Perfect Continuous",
+                question: "They _____ for hours before the bus finally came.",
+                options: ["wait", "waited", "had been waiting", "were waiting"],
+                correct: 2,
+                explanation: "Duration of action before another past event: had been + V-ing.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "She _____ all day, so she was exhausted.",
+                options: ["work", "worked", "had been working", "was working"],
+                correct: 2,
+                explanation: "Extended action causing past result uses had been + V-ing.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "How long _____ you _____ before you found a job?",
+                options: ["have/been looking", "had/been looking", "were/looking", "did/look"],
+                correct: 1,
+                explanation: "Duration question about pre-past action.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "He _____ for 20 years before he retired.",
+                options: ["teach", "taught", "had been teaching", "was teaching"],
+                correct: 2,
+                explanation: "Duration before past milestone uses had been + V-ing.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "The ground was wet because it _____.",
+                options: ["rain", "rained", "had been raining", "was raining"],
+                correct: 2,
+                explanation: "Evidence of prior ongoing action uses Past Perfect Continuous.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "We _____ for 30 minutes when the show started.",
+                options: ["sit", "sat", "had been sitting", "were sitting"],
+                correct: 2,
+                explanation: "Duration before another past event.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "I _____ about moving abroad for years before I finally did it.",
+                options: ["think", "thought", "had been thinking", "was thinking"],
+                correct: 2,
+                explanation: "Long consideration before past decision.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "Her eyes were red because she _____.",
+                options: ["cry", "cried", "had been crying", "was crying"],
+                correct: 2,
+                explanation: "Visible past result of prior ongoing action.",
+                formula: "S + had been + V-ing"
+            },
+            {
+                tense: "Past Perfect Continuous",
+                question: "They _____ the problem for weeks before finding a solution.",
+                options: ["study", "studied", "had been studying", "were studying"],
+                correct: 2,
+                explanation: "Extended effort before past achievement.",
+                formula: "S + had been + V-ing"
+            },
+
+            // Simple Future (10 questions)
+            {
+                tense: "Simple Future",
+                question: "I think it _____ tomorrow.",
+                options: ["rain", "rains", "will rain", "is raining"],
+                correct: 2,
+                explanation: "Predictions with 'think' use will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "Don't worry, I _____ you with your homework.",
+                options: ["help", "helps", "will help", "am helping"],
+                correct: 2,
+                explanation: "Spontaneous offers/promises use will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "Technology _____ our lives in the future.",
+                options: ["transform", "transforms", "will transform", "is transforming"],
+                correct: 2,
+                explanation: "Future predictions use will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "She _____ 25 next month.",
+                options: ["is", "be", "will be", "is being"],
+                correct: 2,
+                explanation: "Future facts use will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "I promise I _____ late again.",
+                options: ["am not", "won't be", "don't be", "haven't been"],
+                correct: 1,
+                explanation: "Promises use will (won't for negative) + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "The meeting _____ at 3 PM.",
+                options: ["start", "starts", "will start", "is starting"],
+                correct: 2,
+                explanation: "Future scheduled events can use will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "AI _____ many jobs in the coming decades.",
+                options: ["replace", "replaces", "will replace", "is replacing"],
+                correct: 2,
+                explanation: "Future predictions use will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "I _____ you when I arrive.",
+                options: ["call", "calls", "will call", "am calling"],
+                correct: 2,
+                explanation: "Future action in main clause uses will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "Do you think they _____ the match?",
+                options: ["win", "wins", "will win", "are winning"],
+                correct: 2,
+                explanation: "Questions about future predictions use will + V1.",
+                formula: "S + will + V1"
+            },
+            {
+                tense: "Simple Future",
+                question: "I'm sure everything _____ fine.",
+                options: ["is", "be", "will be", "being"],
+                correct: 2,
+                explanation: "Confident predictions use will + V1.",
+                formula: "S + will + V1"
+            },
+
+            // Be Going To (10 questions)
+            {
+                tense: "Be Going To",
+                question: "Look at those clouds! It _____ rain.",
+                options: ["will", "is going to", "rains", "rained"],
+                correct: 1,
+                explanation: "Predictions based on evidence use 'be going to'.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "We _____ visit our grandparents this weekend.",
+                options: ["will", "are going to", "visiting", "visited"],
+                correct: 1,
+                explanation: "Planned intentions use 'be going to'.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "She _____ start a new job next month.",
+                options: ["will", "is going to", "starts", "started"],
+                correct: 1,
+                explanation: "Pre-arranged plans use 'be going to'.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "I _____ learn Spanish this year.",
+                options: ["will", "am going to", "learn", "learned"],
+                correct: 1,
+                explanation: "Personal intentions/plans use 'be going to'.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "Watch out! You _____ fall!",
+                options: ["will", "are going to", "fall", "fell"],
+                correct: 1,
+                explanation: "Imminent event based on current evidence.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "They _____ build a new mall here.",
+                options: ["will", "are going to", "build", "built"],
+                correct: 1,
+                explanation: "Announced plans use 'be going to'.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "What _____ you _____ do after graduation?",
+                options: ["will/going to", "are/going to", "do/going to", "did/going to"],
+                correct: 1,
+                explanation: "Questions about plans: are + going to + V1.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "The company _____ expand to Asia.",
+                options: ["will", "is going to", "expand", "expanded"],
+                correct: 1,
+                explanation: "Business plans already decided use 'be going to'.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "I _____ cook dinner tonight.",
+                options: ["will", "am going to", "cook", "cooked"],
+                correct: 1,
+                explanation: "Prior intention to do something uses 'be going to'.",
+                formula: "S + am/is/are + going to + V1"
+            },
+            {
+                tense: "Be Going To",
+                question: "He looks pale. I think he _____ faint.",
+                options: ["will", "is going to", "faints", "fainted"],
+                correct: 1,
+                explanation: "Prediction based on visible evidence.",
+                formula: "S + am/is/are + going to + V1"
+            },
+
+            // Second Conditional (12 questions)
+            {
+                tense: "Second Conditional",
+                question: "If I _____ rich, I would travel the world.",
+                options: ["am", "was/were", "will be", "have been"],
+                correct: 1,
+                explanation: "Hypothetical present condition uses past tense.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "If she _____ harder, she would pass the exam.",
+                options: ["study", "studied", "studies", "will study"],
+                correct: 1,
+                explanation: "Hypothetical condition uses past simple.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "I would buy a house if I _____ the money.",
+                options: ["have", "had", "will have", "having"],
+                correct: 1,
+                explanation: "Unreal present situation uses 'if + past'.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "If the government _____ more, literacy would improve.",
+                options: ["invest", "invested", "invests", "will invest"],
+                correct: 1,
+                explanation: "Hypothetical government action uses past tense.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "What would you do if you _____ the lottery?",
+                options: ["win", "won", "wins", "will win"],
+                correct: 1,
+                explanation: "Hypothetical question uses 'if + past'.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "If I _____ you, I would accept the offer.",
+                options: ["am", "were", "will be", "have been"],
+                correct: 1,
+                explanation: "'If I were you' is the correct form for advice.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "He would be healthier if he _____ smoking.",
+                options: ["stop", "stopped", "stops", "will stop"],
+                correct: 1,
+                explanation: "Hypothetical lifestyle change uses past tense.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "If we _____ a car, we would drive to work.",
+                options: ["have", "had", "will have", "having"],
+                correct: 1,
+                explanation: "Imaginary situation requires past tense.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "They would move abroad if they _____ the chance.",
+                options: ["get", "got", "gets", "will get"],
+                correct: 1,
+                explanation: "Unlikely possibility uses 'if + past'.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "If it _____ raining, we would go to the park.",
+                options: ["stop", "stopped", "stops", "will stop"],
+                correct: 1,
+                explanation: "Hypothetical weather condition uses past tense.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "She would learn faster if she _____ more.",
+                options: ["practice", "practiced", "practices", "will practice"],
+                correct: 1,
+                explanation: "Advice through hypothetical uses past tense.",
+                formula: "If + past, would + V1"
+            },
+            {
+                tense: "Second Conditional",
+                question: "If I _____ more time, I would learn a new language.",
+                options: ["have", "had", "will have", "having"],
+                correct: 1,
+                explanation: "Imaginary present condition uses past tense.",
+                formula: "If + past, would + V1"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let quizStarted = false;
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            shuffleArray(questions);
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            quizStarted = true;
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.remove('hidden');
+
+            updateStats();
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('tenseTag').textContent = q.tense;
+            document.getElementById('qNum').textContent = currentQuestion + 1;
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index);
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            document.getElementById('explanation').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function selectOption(index) {
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+
+            options.forEach(opt => {
+                opt.onclick = null;
+                opt.classList.remove('selected');
+            });
+
+            userAnswers[currentQuestion] = index;
+
+            if (index === q.correct) {
+                options[index].classList.add('correct');
+                score++;
+            } else {
+                options[index].classList.add('incorrect');
+                options[q.correct].classList.add('show-correct');
+            }
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('formulaText').textContent = q.formula;
+            document.getElementById('explanation').classList.add('show');
+
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Next Question';
+
+            updateStats();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                showQuestion();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+            document.getElementById('score').textContent = score;
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+        }
+
+        function showResults() {
+            document.getElementById('questionScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').style.display = 'block';
+
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('finalScore').textContent = percentage + '%';
+
+            let message = '';
+            if (percentage >= 90) {
+                message = 'Excellent! You have mastered English tenses!';
+            } else if (percentage >= 70) {
+                message = 'Great job! You have a good understanding of tenses.';
+            } else if (percentage >= 50) {
+                message = 'Good effort! Keep practicing to improve.';
+            } else {
+                message = 'Keep studying! Review the tense formulas and try again.';
+            }
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        function reviewQuiz() {
+            currentQuestion = 0;
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.remove('hidden');
+            showReviewQuestion();
+        }
+
+        function showReviewQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('tenseTag').textContent = q.tense;
+            document.getElementById('qNum').textContent = currentQuestion + 1;
+            document.getElementById('questionText').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+
+                if (index === q.correct) {
+                    optionDiv.classList.add('correct');
+                } else if (userAnswers[currentQuestion] === index) {
+                    optionDiv.classList.add('incorrect');
+                }
+
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('formulaText').textContent = q.formula;
+            document.getElementById('explanation').classList.add('show');
+
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Back to Results' : 'Next Question';
+            document.getElementById('nextBtn').onclick = () => {
+                currentQuestion++;
+                if (currentQuestion >= questions.length) {
+                    showResults();
+                } else {
+                    showReviewQuestion();
+                }
+            };
+
+            updateStats();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My English Journey</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #a0a0a0;
+        }
+        .section-title {
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            display: inline-block;
+        }
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        .course-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+        }
+        .course-card .part-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+        .course-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .course-card p {
+            color: #a0a0a0;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .course-card .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .course-card .topic-tag {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+        .course-card .arrow {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+        .course-card:hover .arrow {
+            transform: translateX(5px);
+        }
+        .coming-soon {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .coming-soon .part-number {
+            background: #555;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-item .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-item .label {
+            color: #a0a0a0;
+            font-size: 0.95em;
+            margin-top: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>My English Journey</h1>
+            <p>Master English Grammar Through Practice</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="number">100+</div>
+                <div class="label">Quiz Questions</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">11</div>
+                <div class="label">Tense Patterns</div>
+            </div>
+            <div class="stat-item">
+                <div class="number">3</div>
+                <div class="label">Categories</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Grammar Courses</h2>
+
+        <div class="courses-grid">
+            <a href="grammar/quiz.html" class="course-card">
+                <span class="part-number">Part 1</span>
+                <h3>Tense Patterns Quiz</h3>
+                <p>Master all 11 essential English tense patterns with 100 interactive questions and instant feedback.</p>
+                <div class="topics">
+                    <span class="topic-tag">Present Tenses</span>
+                    <span class="topic-tag">Past Tenses</span>
+                    <span class="topic-tag">Future</span>
+                    <span class="topic-tag">Conditionals</span>
+                </div>
+                <span class="arrow">Start Learning &rarr;</span>
+            </a>
+
+            <div class="course-card coming-soon">
+                <span class="part-number">Part 2</span>
+                <h3>Advanced Tenses</h3>
+                <p>Dive deeper into complex tense usage, mixed conditionals, and reported speech.</p>
+                <div class="topics">
+                    <span class="topic-tag">Mixed Conditionals</span>
+                    <span class="topic-tag">Reported Speech</span>
+                </div>
+                <span class="arrow">Coming Soon</span>
+            </div>
+
+            <div class="course-card coming-soon">
+                <span class="part-number">Part 3</span>
+                <h3>Grammar in Context</h3>
+                <p>Apply your grammar knowledge in real-world writing scenarios and conversations.</p>
+                <div class="topics">
+                    <span class="topic-tag">Writing</span>
+                    <span class="topic-tag">Speaking</span>
+                </div>
+                <span class="arrow">Coming Soon</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Keep learning, keep growing!</p>
+        </div>
+    </div>
+</body>
+</html>
