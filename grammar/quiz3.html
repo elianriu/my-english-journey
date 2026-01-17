@@ -234,6 +234,45 @@
         .review-btn:hover {
             background: #f57c00;
         }
+        .restart-btn {
+            background: #e53935;
+            margin-left: 10px;
+        }
+        .restart-btn:hover {
+            background: #c62828;
+        }
+        .continue-btn {
+            background: #4CAF50;
+            margin-left: 10px;
+        }
+        .continue-btn:hover {
+            background: #388E3C;
+        }
+        .saved-progress {
+            background: #e8f5e9;
+            border: 1px solid #4CAF50;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .saved-progress p {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        .header-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .header-buttons .btn {
+            padding: 10px 20px;
+            font-size: 0.9em;
+            margin: 0;
+        }
+        .container {
+            position: relative;
+        }
         .back-link {
             display: inline-block;
             color: white;
@@ -248,6 +287,9 @@
 </head>
 <body>
     <div class="container">
+        <div class="header-buttons" id="headerButtons" style="display: none;">
+            <button class="btn restart-btn" onclick="confirmRestart()">Restart</button>
+        </div>
         <a href="../index.html" class="back-link">&larr; Back to Home</a>
         <div class="header">
             <h1>Grammar in Context</h1>
@@ -268,6 +310,11 @@
             <div class="start-screen" id="startScreen">
                 <h2>Real-World Writing Challenge!</h2>
                 <p>Apply your grammar knowledge in authentic writing contexts</p>
+                <div class="saved-progress" id="savedProgress" style="display: none;">
+                    <p>You have saved progress: Question <span id="savedQuestionNum">0</span>/50 (Score: <span id="savedScore">0</span>)</p>
+                    <button class="btn continue-btn" onclick="continueQuiz()">Continue</button>
+                    <button class="btn restart-btn" onclick="startQuiz()">Start Over</button>
+                </div>
                 <div class="tense-list">
                     <h4>Writing Contexts Covered:</h4>
                     <ul>
@@ -279,7 +326,7 @@
                         <li>Descriptive Writing - Descriptions and reviews</li>
                     </ul>
                 </div>
-                <button class="btn" onclick="startQuiz()">Start Quiz</button>
+                <button class="btn" id="startBtn" onclick="startQuiz()">Start Quiz</button>
             </div>
 
             <!-- Question Screen -->
@@ -795,10 +842,12 @@
             }
         ];
 
+        const STORAGE_KEY = 'quiz3_progress';
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = [];
         let quizStarted = false;
+        let shuffledQuestions = [];
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -808,8 +857,69 @@
             return array;
         }
 
+        // localStorage functions
+        function saveProgress() {
+            const progress = {
+                currentQuestion,
+                score,
+                userAnswers,
+                shuffledQuestions: shuffledQuestions.map(q => questions.indexOf(q))
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            return null;
+        }
+
+        function clearProgress() {
+            localStorage.removeItem(STORAGE_KEY);
+        }
+
+        function checkSavedProgress() {
+            const progress = loadProgress();
+            if (progress && progress.currentQuestion < questions.length) {
+                document.getElementById('savedProgress').style.display = 'block';
+                document.getElementById('savedQuestionNum').textContent = progress.currentQuestion + 1;
+                document.getElementById('savedScore').textContent = progress.score;
+                document.getElementById('startBtn').style.display = 'none';
+            }
+        }
+
+        function continueQuiz() {
+            const progress = loadProgress();
+            if (progress) {
+                shuffledQuestions = progress.shuffledQuestions.map(i => questions[i]);
+                currentQuestion = progress.currentQuestion;
+                score = progress.score;
+                userAnswers = progress.userAnswers;
+                quizStarted = true;
+
+                document.getElementById('startScreen').classList.add('hidden');
+                document.getElementById('resultsScreen').style.display = 'none';
+                document.getElementById('questionScreen').classList.remove('hidden');
+                document.getElementById('headerButtons').style.display = 'block';
+
+                updateStats();
+                showQuestion();
+            }
+        }
+
+        function confirmRestart() {
+            if (confirm('Are you sure you want to restart? All progress will be lost.')) {
+                clearProgress();
+                startQuiz();
+            }
+        }
+
         function startQuiz() {
-            shuffleArray(questions);
+            clearProgress();
+            shuffledQuestions = [...questions];
+            shuffleArray(shuffledQuestions);
             currentQuestion = 0;
             score = 0;
             userAnswers = [];
@@ -818,13 +928,15 @@
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('resultsScreen').style.display = 'none';
             document.getElementById('questionScreen').classList.remove('hidden');
+            document.getElementById('headerButtons').style.display = 'block';
 
+            saveProgress();
             updateStats();
             showQuestion();
         }
 
         function showQuestion() {
-            const q = questions[currentQuestion];
+            const q = shuffledQuestions[currentQuestion];
             document.getElementById('tenseTag').textContent = q.tense;
             document.getElementById('qNum').textContent = currentQuestion + 1;
             document.getElementById('contextBox').textContent = q.context;
@@ -846,7 +958,7 @@
         }
 
         function selectOption(index) {
-            const q = questions[currentQuestion];
+            const q = shuffledQuestions[currentQuestion];
             const options = document.querySelectorAll('.option');
 
             options.forEach(opt => {
@@ -869,15 +981,16 @@
             document.getElementById('explanation').classList.add('show');
 
             document.getElementById('nextBtn').disabled = false;
-            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Next Question';
+            document.getElementById('nextBtn').textContent = currentQuestion === shuffledQuestions.length - 1 ? 'See Results' : 'Next Question';
 
             updateStats();
         }
 
         function nextQuestion() {
             currentQuestion++;
+            saveProgress();
 
-            if (currentQuestion >= questions.length) {
+            if (currentQuestion >= shuffledQuestions.length) {
                 showResults();
             } else {
                 showQuestion();
@@ -888,14 +1001,16 @@
         function updateStats() {
             document.getElementById('currentQ').textContent = currentQuestion + 1;
             document.getElementById('score').textContent = score;
-            document.getElementById('progress').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+            document.getElementById('progress').style.width = ((currentQuestion + 1) / shuffledQuestions.length * 100) + '%';
         }
 
         function showResults() {
             document.getElementById('questionScreen').classList.add('hidden');
             document.getElementById('resultsScreen').style.display = 'block';
+            document.getElementById('headerButtons').style.display = 'none';
+            clearProgress();
 
-            const percentage = Math.round((score / questions.length) * 100);
+            const percentage = Math.round((score / shuffledQuestions.length) * 100);
             document.getElementById('finalScore').textContent = percentage + '%';
 
             let message = '';
@@ -919,7 +1034,7 @@
         }
 
         function showReviewQuestion() {
-            const q = questions[currentQuestion];
+            const q = shuffledQuestions[currentQuestion];
             document.getElementById('tenseTag').textContent = q.tense;
             document.getElementById('qNum').textContent = currentQuestion + 1;
             document.getElementById('contextBox').textContent = q.context;
@@ -947,10 +1062,10 @@
             document.getElementById('explanation').classList.add('show');
 
             document.getElementById('nextBtn').disabled = false;
-            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Back to Results' : 'Next Question';
+            document.getElementById('nextBtn').textContent = currentQuestion === shuffledQuestions.length - 1 ? 'Back to Results' : 'Next Question';
             document.getElementById('nextBtn').onclick = () => {
                 currentQuestion++;
-                if (currentQuestion >= questions.length) {
+                if (currentQuestion >= shuffledQuestions.length) {
                     showResults();
                 } else {
                     showReviewQuestion();
@@ -959,6 +1074,9 @@
 
             updateStats();
         }
+
+        // Check for saved progress on page load
+        document.addEventListener('DOMContentLoaded', checkSavedProgress);
     </script>
 </body>
 </html>
